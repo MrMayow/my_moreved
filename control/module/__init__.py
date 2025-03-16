@@ -8,7 +8,6 @@ import threading
 MODULE_NAME = os.getenv('MODULE_NAME')
 MOVEMENT_URL = "http://movement:8000/moveto"
 NAVIGATION_URL = "http://navigation:8000/getcoordinates"
-COORDINATES = [(10, 20), (15, 25), (30, 40)]  
 
 app = Flask(__name__)
 
