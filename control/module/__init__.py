@@ -44,7 +44,7 @@ def log_current_pos():
 
 def main():
     print(f'[{MODULE_NAME}] started...')
-    #threading.Thread(target=send_movement_coordinates, daemon=True).start()
+    threading.Thread(target=send_movement_coordinates, daemon=True).start()
     threading.Thread(target=log_current_pos, daemon=True).start()
     app.run(host='0.0.0.0', port=8000, threaded=True)
     

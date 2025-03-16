@@ -16,7 +16,7 @@ def health():
 @app.route('/getcoordinates', methods=['GET'])
 def get__coordinates():
     x, y = random.randint(-100, 100), random.randint(-100, 100)
-    print("HEREEEEEEEE")
+    print(f"[{MODULE_NAME}] Sent coordinates ({x}, {y}) to Control")
     return jsonify({"status": "OK", "x":x, "y":y}), 200
 
 
