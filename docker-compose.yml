@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  control:
+    build: ./control
+    container_name: control
+    environment:
+      MODULE_NAME: control
+    ports:
+      - "8001:8000"
+    depends_on:
+      - movement
+      - navigation
+      - communication
+      - sensors
+
+  navigation:
+    build: ./navigation
+    container_name: navigation
+    environment:
+      MODULE_NAME: navigation
+    ports:
+      - "8002:8000"
+    depends_on:
+      - movement
+
+  movement:
+    build: ./movement
+    container_name: movement
+    environment:
+      MODULE_NAME: movement
+    ports:
+      - "8003:8000"
+    depends_on:
+      - communication
+
+  communication:
+    build: ./communication
+    container_name: communication
+    environment:
+      MODULE_NAME: communication
+    ports:
+      - "8004:8000"
+    depends_on:
+      - sensors      
+
+  sensors:
+    build: ./sensors
+    container_name: sensors
+    environment:
+      MODULE_NAME: sensors
+    ports:
+      - "8005:8000"
