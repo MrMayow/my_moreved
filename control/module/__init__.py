@@ -8,7 +8,7 @@ import threading
 MODULE_NAME = os.getenv('MODULE_NAME')
 MOVEMENT_URL = "http://movement:8000/moveto"
 NAVIGATION_URL = "http://navigation:8000/getcoordinates"
-
+SENSORS_GET_DATA_URL = "http://sensors:8000/get_sensors_data"
 app = Flask(__name__)
 
 def send_movement_coordinates():
@@ -24,6 +24,19 @@ def send_movement_coordinates():
         time.sleep(7)
 
 
+def log_sensors_data():
+    while True:
+        try:
+            print(f"[{MODULE_NAME}] Get data from Sensors.")
+            response = requests.get(SENSORS_GET_DATA_URL)
+            response_data = response.json()
+
+            print(f"[{MODULE_NAME}] Response from Sensors: {response_data}")
+        except requests.RequestException as e:
+            print(f"[{MODULE_NAME}] Error getting sensors data: {e}")
+        time.sleep(12)
+
+
 @app.route('/log_position', methods=['POST'])
 def log_current_pos():
     data = request.get_json()
@@ -35,5 +48,6 @@ def log_current_pos():
 def main():
     print(f'[{MODULE_NAME}] started...')
     threading.Thread(target=send_movement_coordinates, daemon=True).start()
+    threading.Thread(target=log_sensors_data, daemon=True).start()
     app.run(host='0.0.0.0', port=8000, threaded=True)
     
