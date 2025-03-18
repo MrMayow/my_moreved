@@ -6,10 +6,6 @@ MODULE_NAME = os.getenv('MODULE_NAME')
 
 app = Flask(__name__)
 
-@app.route("/health")
-def health():
-    return jsonify(status="ok"), 200
-
 @app.route('/moveto', methods=['POST'])
 def move():
     data = request.get_json()

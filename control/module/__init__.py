@@ -11,10 +11,6 @@ NAVIGATION_URL = "http://navigation:8000/getcoordinates"
 
 app = Flask(__name__)
 
-@app.route("/health")
-def health():
-    return jsonify(status="ok"), 200
-
 def send_movement_coordinates():
     while True:
         x, y = random.randint(-100, 100), random.randint(-100, 100)
@@ -27,23 +23,17 @@ def send_movement_coordinates():
             print(f"[{MODULE_NAME}] Error sending coordinates ({x}, {y}): {e}")
         time.sleep(7)
 
+
+@app.route('/log_position', methods=['POST'])
 def log_current_pos():
-    while True:
-        try:
-            print(f"[{MODULE_NAME}] Sent coordinates request to Navigation")
-            response = requests.get(NAVIGATION_URL)
-            response_data = response.json()
-            x, y = response_data.get("x"), response_data.get("y")
-            print(f"[{MODULE_NAME}] Response from Navigation: {response_data}")
-        except requests.exceptions.RequestException as e:
-            print(f"[{MODULE_NAME}] Failed to get data: {e}")
-        time.sleep(10)
-    
-
-
+    data = request.get_json()
+    x, y = data.get("x"), data.get("y")
+    print(f"[{MODULE_NAME}] Received current coordinates from Navigation: x:{x}, y:{y}")
+    return jsonify({"status": "OK", "x":x, "y":y}), 200
+            
+            
 def main():
     print(f'[{MODULE_NAME}] started...')
     threading.Thread(target=send_movement_coordinates, daemon=True).start()
-    threading.Thread(target=log_current_pos, daemon=True).start()
     app.run(host='0.0.0.0', port=8000, threaded=True)
     

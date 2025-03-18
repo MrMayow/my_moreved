@@ -5,20 +5,21 @@ import random
 import time
 
 MODULE_NAME = os.getenv('MODULE_NAME')
-CONTROL_URL = "http://control:8000/currentpos"
+CONTROL_LOG_POS_URL = "http://control:8000/log_position"
 
 app = Flask(__name__)
 
-@app.route("/health")
-def health():
-    return jsonify(status="ok"), 200
 
-@app.route('/getcoordinates', methods=['GET'])
-def get__coordinates():
-    x, y = random.randint(-100, 100), random.randint(-100, 100)
-    print(f"[{MODULE_NAME}] Sent coordinates ({x}, {y}) to Control")
-    return jsonify({"status": "OK", "x":x, "y":y}), 200
-
+def send_coordinates():
+    while True:
+        try:
+            x, y = random.randint(-100, 100), random.randint(-100, 100)
+            print(f"[{MODULE_NAME}] Sent coordinates ({x}, {y}) to Control")
+            response = requests.post(CONTROL_LOG_POS_URL, json={"x": x, "y": y})
+            print(response)
+        except requests.RequestException as e:
+            print(f"[{MODULE_NAME}] Error sending coordinates ({x}, {y}): {e}")
+        time.sleep(9)
 
 def main():
     print(f'[{MODULE_NAME}] started...')
