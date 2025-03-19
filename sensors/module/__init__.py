@@ -7,7 +7,7 @@ MODULE_NAME = os.getenv('MODULE_NAME')
 
 app = Flask(__name__)
 
-@app.route("/get_sensors_data", methods=['GET'])
+@app.route("/sensors-data", methods=['GET'])
 def get_sensors_data():
     radiation = random.randint(0, 4)
     ph = random.randint(0, 14)

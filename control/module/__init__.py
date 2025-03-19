@@ -6,9 +6,9 @@ import time
 import threading
 
 MODULE_NAME = os.getenv('MODULE_NAME')
-MOVEMENT_URL = "http://movement:8000/moveto"
-NAVIGATION_COORDINATES_URL = "http://navigation:8000/get_coordinates"
-SENSORS_GET_DATA_URL = "http://sensors:8000/get_sensors_data"
+MOVEMENT_URL = "http://movement:8000/move-to"
+NAVIGATION_COORDINATES_URL = "http://navigation:8000/navigation-data"
+SENSORS_GET_DATA_URL = "http://sensors:8000/sensors-data"
 app = Flask(__name__)
 
 def send_movement_coordinates():
@@ -37,7 +37,7 @@ def log_sensors_data():
         time.sleep(12)
 
 
-@app.route('/get_coordinates', methods=['GET'])
+@app.route('/navigation-data', methods=['GET'])
 def get_current_pos():
     try:
         print(f"[{MODULE_NAME}] Request coordinates from Navigation")
@@ -51,7 +51,7 @@ def get_current_pos():
     return jsonify({"status": "NO RESULT"})
     
  
-@app.route('/get_ecological_data', methods=['GET'])
+@app.route('/ecological-data', methods=['GET'])
 def get_ecological_data():
     try:
         print(f"[{MODULE_NAME}] Request ecological data from Sensors")

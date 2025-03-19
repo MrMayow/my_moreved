@@ -6,7 +6,7 @@ MODULE_NAME = os.getenv('MODULE_NAME')
 
 app = Flask(__name__)
 
-@app.route('/moveto', methods=['POST'])
+@app.route('/move-to', methods=['POST'])
 def move():
     data = request.get_json()
     x, y = data.get("x"), data.get("y")

@@ -5,8 +5,8 @@ import threading
 import time
 
 MODULE_NAME = os.getenv('MODULE_NAME')
-CONTROL_COORDINATES_URL = "http://control:8000/get_coordinates"
-CONTROL_ECOLOGICAL_URL = "http://control:8000/get_ecological_data"
+CONTROL_COORDINATES_URL = "http://control:8000/navigation-data"
+CONTROL_ECOLOGICAL_URL = "http://control:8000/ecological-data"
 app = Flask(__name__)
 
 def send_coordinates_to_ORDV():
