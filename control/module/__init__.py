@@ -50,7 +50,20 @@ def get_current_pos():
         print(f"[{MODULE_NAME}] Error getting coordinates: {e}")
     return jsonify({"status": "NO RESULT"})
     
-            
+ 
+@app.route('/get_ecological_data', methods=['GET'])
+def get_ecological_data():
+    try:
+        print(f"[{MODULE_NAME}] Request ecological data from Sensors")
+        response = requests.get(SENSORS_GET_DATA_URL)
+        response_data = response.json()
+        radiation, ph = response_data.get("radiation"), response_data.get("ph")
+        print(f"[{MODULE_NAME}] Received ecological data from Sensors: radiation:{radiation}, ph:{ph}")
+        return jsonify({"status": "OK", "radiation":radiation, "ph":ph})
+    except requests.RequestException as e:
+        print(f"[{MODULE_NAME}] Error getting ecological data: {e}")
+    return jsonify({"status": "NO RESULT"})
+
             
 def main():
     print(f'[{MODULE_NAME}] started...')

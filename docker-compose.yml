@@ -10,8 +10,8 @@ services:
     depends_on:
       - movement
       - navigation
-      - communication
       - sensors
+      
 
   navigation:
     build: ./navigation
@@ -20,8 +20,6 @@ services:
       MODULE_NAME: navigation
     ports:
       - "8002:8000"
-    depends_on:
-      - movement
 
   movement:
     build: ./movement
@@ -30,8 +28,6 @@ services:
       MODULE_NAME: movement
     ports:
       - "8003:8000"
-    depends_on:
-      - communication
 
   communication:
     build: ./communication
@@ -41,7 +37,7 @@ services:
     ports:
       - "8004:8000"
     depends_on:
-      - sensors      
+      - control     
 
   sensors:
     build: ./sensors
