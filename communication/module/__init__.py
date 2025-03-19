@@ -3,11 +3,14 @@ import requests
 import os
 import threading
 import time
+import random
 
 MODULE_NAME = os.getenv('MODULE_NAME')
 CONTROL_COORDINATES_URL = "http://control:8000/navigation-data"
 CONTROL_ECOLOGICAL_URL = "http://control:8000/ecological-data"
+CONTROL_ROUTE_URL = "http://control:8000/setup-route"
 app = Flask(__name__)
+
 
 def send_coordinates_to_ORDV():
     while True:
@@ -22,6 +25,7 @@ def send_coordinates_to_ORDV():
             print(f"[{MODULE_NAME}] Error getting coordinates: {e}")
         time.sleep(5)
 
+
 def send_ecological_data_to_ORDV():
     while True:
         try:
@@ -35,8 +39,20 @@ def send_ecological_data_to_ORDV():
         time.sleep(10)
 
 
+def send_route():
+    try:
+        print(f"[{MODULE_NAME}] CKEOB send route")
+        route = [[random.randint(1, 100), random.randint(1, 100)] for x in range(10)]
+        json_data = {"route": route}
+        response = requests.post(CONTROL_ROUTE_URL, json = json_data)
+        response_data = response.json()
+    except requests.RequestException as e:
+        print(f"[{MODULE_NAME}] Error send route: {e}")
+        
+
 def main():
     print(f'[{MODULE_NAME}] started...')
     threading.Thread(target=send_coordinates_to_ORDV, daemon=True).start()
     threading.Thread(target=send_ecological_data_to_ORDV, daemon=True).start()
+    send_route()
     app.run(host='0.0.0.0', port=8000, threaded=True)

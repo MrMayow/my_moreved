@@ -23,20 +23,6 @@ def send_movement_coordinates():
             print(f"[{MODULE_NAME}] Error sending coordinates ({x}, {y}): {e}")
         time.sleep(7)
 
-
-def log_sensors_data():
-    while True:
-        try:
-            print(f"[{MODULE_NAME}] Get data from Sensors.")
-            response = requests.get(SENSORS_GET_DATA_URL)
-            response_data = response.json()
-
-            print(f"[{MODULE_NAME}] Response from Sensors: {response_data}")
-        except requests.RequestException as e:
-            print(f"[{MODULE_NAME}] Error getting sensors data: {e}")
-        time.sleep(12)
-
-
 @app.route('/navigation-data', methods=['GET'])
 def get_current_pos():
     try:
@@ -64,6 +50,20 @@ def get_ecological_data():
         print(f"[{MODULE_NAME}] Error getting ecological data: {e}")
     return jsonify({"status": "NO RESULT"})
 
+
+@app.route('/setup-route', methods=['POST'])
+def setup_route():
+    try:
+        print(f"[{MODULE_NAME}] Request setup route from Communication")
+        data = request.get_json()
+        route = list(data.get("route"))
+        json_data = {"route":route}
+        response = requests.post(MOVEMENT_URL, json=json_data)
+        response_data = response.json()
+        return jsonify({"status": "OK"}), 200
+    except requests.RequestException as e:
+        print(f"[{MODULE_NAME}] Error send route: {e}")
+    return jsonify({"status": "NO RESULT"})
             
 def main():
     print(f'[{MODULE_NAME}] started...')

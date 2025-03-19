@@ -9,9 +9,9 @@ app = Flask(__name__)
 @app.route('/move-to', methods=['POST'])
 def move():
     data = request.get_json()
-    x, y = data.get("x"), data.get("y")
-    print(f"[{MODULE_NAME}] Moving to coordinates: {x}, {y}")
-    return jsonify({"status": "OK", "message": f"Moving to {x}, {y}"}), 200
+    route = list(data.get("route"))
+    print(f"[{MODULE_NAME}] Setup route: {route}")
+    return jsonify({"status": "OK"}), 200
 
 
 def main():
